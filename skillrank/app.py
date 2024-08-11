@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pymongo
 
 # MongoDB connection string
@@ -15,6 +16,9 @@ collection = db.skillrank
 
 # Create Flask app
 app = Flask(__name__)
+
+# Enable CORS
+CORS(app)
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
