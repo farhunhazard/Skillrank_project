@@ -1,18 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-
 import React, { useState } from 'react';
 
 function App() {
-  // State for storing first name and last name
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
+    
+    const data = {
+      firstName: firstName,
+      lastName: lastName
+    };
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/add_user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      console.log('Success:', result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
