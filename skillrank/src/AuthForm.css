@@ -57,4 +57,15 @@
   .auth-button:hover {
     background-color: #0056b3;
   }
+
+  .link-button {
+    background: none;
+    border: none;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0;
+  }
+  
   

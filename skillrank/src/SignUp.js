@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AuthForm.css';
 
 function SignUp() {
@@ -6,6 +7,7 @@ function SignUp() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -17,8 +19,6 @@ function SignUp() {
       password: password,
     };
 
-    console.log('Sign Up Data:', data);
-
     try {
       const response = await fetch('http://127.0.0.1:5000/signup', {
         method: 'POST',
@@ -29,9 +29,10 @@ function SignUp() {
       });
 
       const result = await response.json();
-      console.log('Sign Up Success:', result);
       if (response.status === 201) {
-        alert('Sign up successful!');
+        // Store user data in localStorage and redirect to NameForm
+        localStorage.setItem('user', JSON.stringify(data));
+        navigate('/nameform');
       } else {
         alert(result.error || 'Sign up failed.');
       }
@@ -83,6 +84,7 @@ function SignUp() {
         </div>
         <button type="submit" className="auth-button">Sign Up</button>
       </form>
+      <p>Already registered? <button onClick={() => navigate('/login')} className="link-button">Login</button></p>
     </div>
   );
 }

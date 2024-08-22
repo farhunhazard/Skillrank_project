@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AuthForm.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -12,8 +14,6 @@ function Login() {
       email: email,
       password: password,
     };
-
-    console.log('Login Data:', data);
 
     try {
       const response = await fetch('http://127.0.0.1:5000/login', {
@@ -25,15 +25,16 @@ function Login() {
       });
 
       const result = await response.json();
-      console.log('Login Success:', result);
-      if (response.status === 200) {
-        alert('Login successful!');
+      if (response.status === 200 && result.user) {
+        // Store user data in localStorage and redirect to NameForm
+        localStorage.setItem('user', JSON.stringify(result.user));
+        navigate('/nameform');
       } else {
-        alert(result.error || 'Login failed.');
+        alert(result.error || 'Invalid email or password. Please try again.');
       }
     } catch (error) {
       console.error('Login Error:', error);
-      alert('An error occurred during login.');
+      alert('An error occurred during login. Please try again.');
     }
   };
 
@@ -48,6 +49,7 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
+            required
           />
         </div>
         <div className="form-group">
@@ -57,6 +59,7 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
+            required
           />
         </div>
         <button type="submit" className="auth-button">Login</button>
